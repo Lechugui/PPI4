@@ -216,3 +216,8 @@ def get_last_3_matches(db: Session, user_id: int):
         .order_by(models.Reservation.fecha.desc(), models.Reservation.time_slot_id.desc())\
         .limit(3)\
         .all()
+
+#traer todos los usuarios
+
+def get_users(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).offset(skip).limit(limit).all()

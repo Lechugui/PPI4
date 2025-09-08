@@ -50,6 +50,9 @@ class UserOut(UserBase):
     role: RoleOut | None = None
     company: CompanyOut | None = None
 
+    nombre: str
+    email: str
+
     class Config:
         from_attributes = True 
 
