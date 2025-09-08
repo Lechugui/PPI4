@@ -94,8 +94,11 @@ export const AuthProvider = ({ children }) => {
         tokenType: data.token_type,
         id: data.user_id,
         name: data.user_name,
-        email: data.user_email
+        email: data.user_email,
+        role_id: data.role_id //almaceno el role_id 
       }
+
+      console.log("🔑 Usuario logueado:", userData) // Debug para verificar role_id
 
       localStorage.setItem(
         'paddliemos_session',
@@ -119,7 +122,15 @@ export const AuthProvider = ({ children }) => {
         loading: false
       }))
 
-      setTimeout(() => navigate('/'), 2000)
+      //  Redirección según el rol
+      setTimeout(() => {
+        if (userData.role_id === 1) {
+          navigate('/adminPage') // si es admin
+        } else {
+          navigate('/') // si es cliente
+        }
+      }, 2000)
+
 
       return true
     } catch (error) {

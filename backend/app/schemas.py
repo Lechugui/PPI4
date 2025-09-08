@@ -63,6 +63,7 @@ class Token(BaseModel):
     user_id: int
     user_name: str
     user_email: str
+    role_id: int
     class Config:
         from_attributes = True 
 

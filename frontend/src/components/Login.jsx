@@ -7,7 +7,7 @@ function Login () {
     username: '',
     password: ''
   })
-  const { login, errors } = useAuth()
+  const { login, errors, user } = useAuth() //agrego para traer usuario
 
   const [mensajeExito, setMensajeExito] = useState('')
   const [showSuccessModal, setShowSuccessModal] = useState(false)
@@ -46,7 +46,13 @@ function Login () {
       setShowSuccessModal(true)
       setTimeout(() => {
         setShowSuccessModal(false)
-        navigate('/')
+
+        console.log("Usuario actual:", user) // Debug para verificar el usuario
+        if (user.role_id === 1) {
+          navigate('/adminPage') //si es admin lo mando al dashboard de admin
+        } else {
+          navigate('/') //si no es admin lo mando al home
+        }
       }, 2000)
     } else {
       null

@@ -7,6 +7,10 @@ import { Routes, Route, useNavigate, Link } from 'react-router-dom'
 import './App.css'
 import Home from './components/Home'
 
+import ProtectedRoute from './components/ProtectedRoute'
+import AdminDashboard from './components/AdminDashboard'
+import AdminPage from './components/AdminPage'
+
 function HistorialTurnosWrapper () {
   const [mostrarPerfil, setMostrarPerfil] = useState(false)
 
@@ -67,6 +71,8 @@ function App () {
         path='/perfilUsuarios'
         element={<ProfileUser abierto={false} cerrar={() => {}} />}
       />
+      <Route path='/admin' element={<AdminDashboard />} />
+      <Route path='/adminPage' element={<AdminPage />} />
     </Routes>
   )
 }

@@ -2,7 +2,7 @@ import sqlite3
 import os
 from datetime import datetime, time, date, timedelta
 from sqlalchemy.orm import Session
-from app import models
+from app import models, auth
 from app.database import SessionLocal, engine
 
 # crear todas las tablas si no se migró
@@ -68,6 +68,14 @@ def seed():
             contraseña="password123",
             role_id=roles[1].id,
             company_id=companies[1].id
+        ),
+        # Creo admin para pruebas
+        models.User(
+            nombre="Super Admin",
+            email="superadmin@admin.com",
+            contraseña=auth.get_password_hash("admin123"),
+            role_id=roles[0].id,
+            company_id=None
         )
     ]
     db.add_all(users)

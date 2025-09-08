@@ -95,6 +95,13 @@ async def login(
             headers={"WWW-Authenticate": "Bearer"},
         )
 
+
+    # # DEBUG prints para ver qué llega
+    # print("DB User:", db_user.email, db_user.contraseña)
+    # print("Password ingresada:", form_data.password)
+    # print("Resultado verificación:", auth.verify_password(form_data.password, db_user.contraseña))
+
+
     if not auth.verify_password(form_data.password, db_user.contraseña): 
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -103,7 +110,7 @@ async def login(
         )
 
     access_token = auth.create_access_token(data={"sub": db_user.email})
-    return {"access_token": access_token, "token_type": "bearer", "user_id": db_user.id, "user_name": db_user.nombre, "user_email": db_user.email}
+    return {"access_token": access_token, "token_type": "bearer", "user_id": db_user.id, "user_name": db_user.nombre, "user_email": db_user.email, "role_id": db_user.role_id} #agrego que devuelva el id.role para saber si es admin o cliente
 
 @router.delete("/users/{user_id}", status_code=status.HTTP_200_OK)
 async def delete_user_by_id(
