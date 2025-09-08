@@ -45,7 +45,8 @@ function AdminPage() {
           <div className="card-body">
             <h2 className="card-title text-primary">Usuarios</h2>
             <p className="text-gray-500">Gestiona los usuarios registrados en la plataforma.</p>
-            <button className="btn btn-primary">Ver usuarios</button>
+            <Link to="/admin/users" className="btn btn-primary">Ver usuarios</Link>
+            {/* <button className="btn btn-primary">Ver usuarios</button> */}
           </div>
         </div>
       </div>

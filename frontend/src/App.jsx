@@ -11,6 +11,8 @@ import ProtectedRoute from './components/ProtectedRoute'
 import AdminDashboard from './components/AdminDashboard'
 import AdminPage from './components/AdminPage'
 
+import UsersList from './components/admin/UsersList'
+
 function HistorialTurnosWrapper () {
   const [mostrarPerfil, setMostrarPerfil] = useState(false)
 
@@ -73,6 +75,9 @@ function App () {
       />
       <Route path='/admin' element={<AdminDashboard />} />
       <Route path='/adminPage' element={<AdminPage />} />
+      
+      <Route path="/admin/users" element={<ProtectedRoute allowedRoles={[1]}> <UsersList /> </ProtectedRoute>}/>
+
     </Routes>
   )
 }
