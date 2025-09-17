@@ -1,7 +1,10 @@
-import React from 'react'
-import './App.css'
+import React, { useState } from 'react';
+import HistorialTurnos from "./components/HistorialTurnos";
+import PerfilUsuarios from './components/PerfilUsuario';
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
+import './App.css';
 
-function App () {
+function App() {
   return (
     <main className='min-h-screen bg-base-200 flex items-center justify-center'>
       <section className='text-center space-y-8'>
