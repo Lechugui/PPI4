@@ -60,6 +60,7 @@ class TimeSlot(Base):
     id = Column(Integer, primary_key=True, index=True)
     hora_inicio = Column(Time)
     hora_fin = Column(Time)
+    activo = Column(Boolean, default=True, nullable=True)
 
     reservations = relationship("Reservation", back_populates="time_slot")
 
