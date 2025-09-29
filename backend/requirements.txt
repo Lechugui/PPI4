@@ -2,6 +2,12 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic
+pydantic[email]
 sqlite-utils
 python-dotenv
 alembic
+passlib
+httpx
+pytest
+python-multipart
+python-jose[cryptography]==3.3.0
