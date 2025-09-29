@@ -1,6 +1,5 @@
 from pydantic import BaseModel, EmailStr
 from datetime import date, time
-from typing import Optional
 
 # --------------------
 # Company
@@ -41,7 +40,7 @@ class UserBase(BaseModel):
     email: EmailStr
 
 class UserCreate(UserBase):
-    contraseña: str 
+    contraseña: str
     role_id: int
     company_id: int | None = None
 
@@ -51,27 +50,7 @@ class UserOut(UserBase):
     company: CompanyOut | None = None
 
     class Config:
-        from_attributes = True 
-
-class UserLogin(BaseModel):
-    email: EmailStr
-    contraseña: str
-                                           
-class Token(BaseModel):
-    access_token: str
-    token_type: str
-
-    class Config:
-        from_attributes = True 
-
-class TokenData(BaseModel):
-    email: str | None = None
-
-class UserNombreResponse(BaseModel):
-    nombre: str
-
-class UserUpdate(BaseModel):
-    nombre: Optional[str] = None
+        orm_mode = True
 
 # --------------------
 # CourtType
@@ -169,6 +148,19 @@ class ReservationOut(ReservationBase):
     court: CourtOut | None = None
     time_slot: TimeSlotOut | None = None
     status: ReservationStatusOut | None = None
+
+    class Config:
+        orm_mode = True
+
+# --------------------
+# Turno 
+# --------------------
+class TurnoOut(BaseModel):
+    id: int
+    usuario_id: int
+    fecha: date
+    descripcion: str | None = None
+    estado: str = "pendiente"  # Default state
 
     class Config:
         orm_mode = True

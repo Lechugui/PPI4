@@ -41,3 +41,17 @@ def read_reservation(
     if db_reservation is None:
         raise HTTPException(status_code=404, detail="Reservation not found")
     return db_reservation
+
+
+#Endpoint para exponer el historial de partidos de un usuario
+
+@router.get("/{user_id}/last-matches", response_model=List[schemas.ReservationOut])
+def read_last_matches(
+    user_id: int,
+    db: Session = Depends(get_db)
+):
+    matches = crud.get_last_3_matches(db, user_id=user_id)
+    if not matches:
+        raise HTTPException(status_code=404, detail="No matches found for this user")
+    return matches
+
