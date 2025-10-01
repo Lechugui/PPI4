@@ -4,7 +4,7 @@ import { Calendar, User } from "lucide-react";
 
 
 import ThemeToggle from './ThemeToggle';
-import PerfilUsuario from './PerfilUsuario';
+import PerfilUsuario from './ProfileUser';
 
 
 const turnosEjemplo = [

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import HistorialTurnos from "./components/HistorialTurnos";
-import PerfilUsuarios from './components/PerfilUsuario';
+import PerfilUsuarios from './components/ProfileUser';
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 
