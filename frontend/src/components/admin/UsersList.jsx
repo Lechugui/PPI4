@@ -7,7 +7,7 @@ function UserList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // 📌 Obtener lista de usuarios
+  // Obtener lista de usuarios
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -28,7 +28,7 @@ function UserList() {
     }
   };
 
-  // 📌 Eliminar usuario
+  // Eliminar usuario
   const deleteUser = async (id) => {
     if (!window.confirm("¿Seguro que quieres eliminar este usuario?")) return;
 
@@ -42,7 +42,7 @@ function UserList() {
 
       if (!res.ok) throw new Error("Error al eliminar usuario");
 
-      // Refrescamos lista quitando el eliminado
+      // actualizar lista quitando el eliminado
       setUsers(users.filter((u) => u.id !== id));
     } catch (err) {
       alert(err.message);

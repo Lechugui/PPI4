@@ -31,7 +31,7 @@ function AdminPage() {
       </header>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Tarjeta para gestionar reservas */}
+        {/* Gestionar reservas */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-primary">Reservas</h2>
@@ -40,7 +40,7 @@ function AdminPage() {
           </div>
         </div>
 
-        {/* Tarjeta para gestionar usuarios */}
+        {/*Gestionar usuarios */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
             <h2 className="card-title text-primary">Usuarios</h2>
