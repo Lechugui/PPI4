@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 function UserList() {
   const { token } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   // Obtener lista de usuarios
   const fetchUsers = async () => {
@@ -58,6 +60,7 @@ function UserList() {
 
   return (
     <div className="p-6 bg-base-200 min-h-screen">
+      <button className="btn btn-outline mb-4" onClick={() => navigate('/adminPage')}> Volver</button>
       <h2 className="text-2xl font-bold mb-4 text-primary">Usuarios</h2>
 
       <table className="table w-full bg-base-100 shadow-md rounded-lg">

@@ -10,6 +10,7 @@ import Home from './components/Home'
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminDashboard from './components/AdminDashboard'
 import AdminPage from './components/AdminPage'
+import ReservationsList from './components/admin/ReservationsList'  
 
 import UsersList from './components/admin/UsersList'
 
@@ -77,7 +78,7 @@ function App () {
       <Route path='/adminPage' element={<AdminPage />} />
       
       <Route path="/admin/users" element={<ProtectedRoute allowedRoles={[1]}> <UsersList /> </ProtectedRoute>}/>
-
+      <Route path="/admin/reservations" element={<ProtectedRoute allowedRoles={[1]}> <ReservationsList /> </ProtectedRoute>}/>
     </Routes>
   )
 }

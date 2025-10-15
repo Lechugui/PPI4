@@ -36,7 +36,8 @@ function AdminPage() {
           <div className="card-body">
             <h2 className="card-title text-primary">Reservas</h2>
             <p className="text-gray-500">Administra todas las reservas del sistema.</p>
-            <button className="btn btn-primary">Ver reservas</button>
+            <Link to="/admin/reservations" className="btn btn-primary">Ver reservas</Link>
+            {/* <button className="btn btn-primary">Ver reservas</button> */}
           </div>
         </div>
 
