@@ -74,7 +74,6 @@ function App () {
         path='/perfilUsuarios'
         element={<ProfileUser abierto={false} cerrar={() => {}} />}
       />
-      <Route path='/admin' element={<AdminDashboard />} />
       <Route path='/adminPage' element={<AdminPage />} />
       
       <Route path="/admin/users" element={<ProtectedRoute allowedRoles={[1]}> <UsersList /> </ProtectedRoute>}/>
