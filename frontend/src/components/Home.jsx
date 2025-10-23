@@ -22,10 +22,8 @@ function Home() {
 
   const handleLogoutClick = () => {
     logout();
-
     setLogoutMessage("¡Tu sesión ha sido cerrada con éxito!");
     setShowLogoutModal(true);
-
     setTimeout(() => {
       setShowLogoutModal(false);
       navigate("/");
@@ -34,7 +32,7 @@ function Home() {
 
   return (
     <BookingProvider>
-      <header className="bg-base-100 shadow-md py-4 flex flex-col md:flex-row  mx-10 justyfy-center gap-10 ">
+      <header className="bg-base-100 shadow-md py-4 flex flex-col md:flex-row mx-10 justyfy-center gap-10 ">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center gap-2">
             <img src={"/paddliemos.webp"} alt="logo" className="w-22 h-22" />
@@ -46,25 +44,45 @@ function Home() {
             </span>
           </div>
         </div>
+
         {user ? (
           <div>
-            <div className="grid grid-cols-2 space-x-2 gap-6 align-end">
-              <span className="text-lg font-semibold text-gray-500 md:text-nowrap">
-                ¡Bienvenido, {name}!
-              </span>
-              <ThemeToggle />
-              <Link
-                to="/historialTurnos"
-                className="btn btn-sm btn-primary text-nowrap"
-              >
-                Mis Turnos Previos
-              </Link>
-              <button
-                className="btn btn-sm btn-error  "
-                onClick={handleLogoutClick}
-              >
-                Cerrar Sesión
-              </button>
+            {/* cambio: contenedor en columna con dos filas arriba saludo+toggle / abajo botones */}
+            <div className="flex flex-col items-end gap-2">
+              {/* Fila superior: saludo y ThemeToggle (antes estaban separados en vertical) */}
+              <div className="flex items-center gap-3">
+                <span className="text-lg font-semibold text-gray-500 md:text-nowrap truncate max-w-[220px]">
+                  ¡Bienvenido, {name}!
+                </span>
+                <ThemeToggle />
+              </div>
+
+              {/* Fila inferior: botones alineados en horizontal */}
+              <div className="flex gap-3">
+                {/* Botón visible solo para administradores */}
+                {user.role_id === 1 && (
+                  <Link
+                    to="/adminPage"
+                    className="btn btn-sm btn-success whitespace-nowrap"
+                  >
+                    Panel de Administración
+                  </Link>
+                )}
+
+                <Link
+                  to="/historialTurnos"
+                  className="btn btn-sm btn-primary whitespace-nowrap"
+                >
+                  Mis Turnos Previos
+                </Link>
+
+                <button
+                  className="btn btn-sm btn-error whitespace-nowrap"
+                  onClick={handleLogoutClick}
+                >
+                  Cerrar Sesión
+                </button>
+              </div>
             </div>
           </div>
         ) : (
@@ -87,6 +105,7 @@ function Home() {
           </div>
         )}
       </header>
+
       <main className="min-h-screen bg-base-200 flex flex-col">
         <section className="container mx-auto px-4 py-8 flex-grow">
           <div className="text-center mb-8">
@@ -104,7 +123,6 @@ function Home() {
             </div>
           ) : (
             <div className="w-full max-w-3xl mx-auto">
-              {" "}
               <article className="mt-8">
                 <h2 className="text-3xl text-center font-semibold text-primary">
                   ¿Cómo funciona?
