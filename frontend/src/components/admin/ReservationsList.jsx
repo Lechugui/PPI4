@@ -6,35 +6,67 @@ const ReservationsList = () => {
   const { token } = useAuth();
   const [reservas, setReservas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState(null); // muestro spinner en el botón de eliminar
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchReservas = async () => {
-      setLoading(true);
-      setError("");
-      try {
-        const res = await fetch("http://127.0.0.1:8000/reservations/", {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  const fetchReservas = async () => {
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch("http://127.0.0.1:8000/reservations/", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (!res.ok) {
-          const err = await res.json().catch(() => ({}));
-          throw new Error(err.detail || "No se pudieron cargar las reservas");
-        }
-
-        const data = await res.json();
-        setReservas(data);
-      } catch (e) {
-        setError(e.message);
-      } finally {
-        setLoading(false);
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || "No se pudieron cargar las reservas");
       }
-    };
 
+      const data = await res.json();
+      setReservas(data);
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Eliminar reserva
+  const handleDelete = async (id) => {
+    if (!window.confirm(`¿Seguro que deseas eliminar la reserva #${id}?`)) {
+      return;
+    }
+
+    setDeletingId(id);
+    try {
+      const res = await fetch(`http://127.0.0.1:8000/reservations/reservation/${id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // backend devuelve 200 con JSON
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err.detail || "No se pudo eliminar la reserva");
+      }
+
+      setReservas((prev) => prev.filter((r) => r.id !== id));
+    } catch (e) {
+      alert(e.message);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  // Cargar datos al iniciar componente y cuando cambie el token
+  useEffect(() => {
     fetchReservas();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   return (
@@ -73,6 +105,7 @@ const ReservationsList = () => {
                     <th>Fecha</th>
                     <th>Horario</th>
                     <th>Estado</th>
+                    <th>Acciones</th> {/* agrego nueva columna */}
                   </tr>
                 </thead>
                 <tbody>
@@ -82,15 +115,26 @@ const ReservationsList = () => {
                       <td>{r.user?.nombre ?? r.user_id}</td>
                       <td>{r.court?.nombre ?? r.court_id}</td>
                       <td>
-                        {new Date(r.fecha + "T00:00:00").toLocaleDateString("es-AR")}
+                        {new Date((r.fecha ?? "") + "T00:00:00").toLocaleDateString("es-AR")}
                       </td>
                       <td>
                         {r.time_slot?.hora_inicio
                           ? `${r.time_slot.hora_inicio} - ${r.time_slot?.hora_fin ?? ""}`
                           : r.time_slot_id ?? "N/A"}
                       </td>
+                      <td>{r.status?.nombre ?? r.status_id ?? "—"}</td>
                       <td>
-                        {r.status?.nombre ?? r.status_id ?? "—"}
+                        <button
+                          className={`btn btn-error btn-sm ${deletingId === r.id ? "btn-disabled" : ""}`}
+                          onClick={() => handleDelete(r.id)}
+                          disabled={deletingId === r.id}
+                        >
+                          {deletingId === r.id ? (
+                            <span className="loading loading-spinner loading-xs"></span>
+                          ) : (
+                            "Eliminar"
+                          )}
+                        </button>
                       </td>
                     </tr>
                   ))}

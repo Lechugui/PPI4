@@ -87,4 +87,3 @@ def read_last_matches(
     if not matches:
         raise HTTPException(status_code=404, detail="No matches found for this user")
     return matches
-
