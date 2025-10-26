@@ -1,6 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import courts, reservations, time_slots, login
 from fastapi import FastAPI, Depends, HTTPException
+from sqlalchemy.orm import joinedload
 
 from sqlalchemy.orm import Session
 from typing import List
@@ -49,7 +50,11 @@ def get_db():
 
 @app.get("/users/", response_model=List[schemas.UserOut])
 def read_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    return crud.get_users(db, skip=skip, limit=limit)
+    return (
+        db.query(models.User)
+        .options(joinedload(models.User.role), joinedload(models.User.company))
+        .offset(skip).limit(limit).all()
+    )
 
 @app.post("/users/", response_model=schemas.UserOut)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):

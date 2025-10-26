@@ -1,4 +1,4 @@
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import and_
 from datetime import date
 from . import models, schemas, auth
@@ -43,15 +43,13 @@ def delete_user(db: Session, user_id: int):
 
 def update_user(db: Session, user_id: int, user_update: schemas.UserUpdate):
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
-    if db_user:
-        update_data = user_update.model_dump(exclude_unset=True) 
-        for key, value in update_data.items():
-            setattr(db_user, key, value)
-        db.add(db_user)
-        db.commit()
-        db.refresh(db_user)
+    if not db_user:
+        return None
+    for k, v in user_update.model_dump(exclude_unset=True).items():
+        setattr(db_user, k, v)
+    db.commit()
+    db.refresh(db_user)
     return db_user
-
 
 
 # --------------------

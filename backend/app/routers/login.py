@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Security
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError
 import datetime
@@ -129,16 +129,18 @@ async def update_user_profile(
     user_id: int,
     user_update: schemas.UserUpdate, 
     db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user) 
+    current_user: models.User = Depends(get_current_user)
 ):
-    updated_user = crud.update_user(db, user_id=user_id, user_update=user_update)
-    if not updated_user:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Usuario no encontrado."
-        )
-    return updated_user
+    updated = crud.update_user(db, user_id=user_id, user_update=user_update)
+    if not updated:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado.")
 
+    return (
+        db.query(models.User)
+        .options(joinedload(models.User.role), joinedload(models.User.company))
+        .filter(models.User.id == user_id)
+        .first()
+    )
 #Crear endpoint para obtener lista de usuarios
 
 @router.get("/users", response_model=list[schemas.UserOut])

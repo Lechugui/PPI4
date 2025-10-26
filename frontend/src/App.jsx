@@ -3,13 +3,13 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Booking from './components/Booking'
 import ProfileUser from './components/ProfileUser'
-import { Routes, Route, useNavigate, Link } from 'react-router-dom'
+import { Routes, Route, Link } from 'react-router-dom'
 import './App.css'
 import Home from './components/Home'
 
 import ProtectedRoute from './components/ProtectedRoute'
 import AdminPage from './components/AdminPage'
-import ReservationsList from './components/admin/ReservationsList'  
+import ReservationsList from './components/admin/ReservationsList'
 
 import UsersList from './components/admin/UsersList'
 
@@ -74,9 +74,25 @@ function App () {
         element={<ProfileUser abierto={false} cerrar={() => {}} />}
       />
       <Route path='/adminPage' element={<AdminPage />} />
-      
-      <Route path="/admin/users" element={<ProtectedRoute allowedRoles={[1]}> <UsersList /> </ProtectedRoute>}/>
-      <Route path="/admin/reservations" element={<ProtectedRoute allowedRoles={[1]}> <ReservationsList /> </ProtectedRoute>}/>
+
+      <Route
+        path='/admin/users'
+        element={
+          <ProtectedRoute allowedRoles={[1]}>
+            {' '}
+            <UsersList />{' '}
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path='/admin/reservations'
+        element={
+          <ProtectedRoute allowedRoles={[1]}>
+            {' '}
+            <ReservationsList />{' '}
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   )
 }

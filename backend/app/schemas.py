@@ -33,8 +33,11 @@ class RoleOut(RoleBase):
     class Config:
         orm_mode = True
 
+from pydantic import BaseModel, EmailStr, ConfigDict
+
+
 # --------------------
-# User
+# 1
 # --------------------
 class UserBase(BaseModel):
     nombre: str
@@ -45,21 +48,19 @@ class UserCreate(UserBase):
     role_id: int
     company_id: int | None = None
 
-class UserOut(UserBase):
+class UserOut(BaseModel):
     id: int
+    nombre: str
+    email: EmailStr
+    role_id: int                    
     role: RoleOut | None = None
     company: CompanyOut | None = None
-
-    nombre: str
-    email: str
-
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class UserLogin(BaseModel):
     email: EmailStr
     contraseña: str
-                                           
+
 class Token(BaseModel):
     access_token: str
     token_type: str
@@ -77,7 +78,11 @@ class UserNombreResponse(BaseModel):
     nombre: str
 
 class UserUpdate(BaseModel):
-    nombre: Optional[str] = None
+    nombre: str | None = None
+    email: EmailStr | None = None
+    role_id: int | None = None
+    company_id: int | None = None
+    contraseña: str | None = None
 
 # --------------------
 # CourtType
