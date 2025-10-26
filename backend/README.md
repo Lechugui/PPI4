@@ -1,1 +1,0 @@
-Creen el venv, activenlo y instalen las dependencias
