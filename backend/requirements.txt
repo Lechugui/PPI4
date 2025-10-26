@@ -2,11 +2,6 @@ fastapi
 uvicorn
 sqlalchemy
 pydantic
-<<<<<<< HEAD
-sqlite-utils
-python-dotenv
-alembic
-=======
 pydantic[email]
 sqlite-utils
 python-dotenv
@@ -17,4 +12,3 @@ pytest
 python-multipart
 python-jose[cryptography]==3.3.0
 bcrypt>4
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834

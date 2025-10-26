@@ -1,11 +1,6 @@
-<<<<<<< HEAD
-from pydantic import BaseModel, EmailStr
-from datetime import date, time
-=======
 from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, time
 from typing import Optional
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
 # --------------------
 # Company
@@ -38,35 +33,17 @@ class RoleOut(RoleBase):
     class Config:
         orm_mode = True
 
-<<<<<<< HEAD
-# --------------------
-# User
-=======
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 # --------------------
 # 1
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 # --------------------
 class UserBase(BaseModel):
     nombre: str
     email: EmailStr
 
 class UserCreate(UserBase):
-<<<<<<< HEAD
-    contraseña: str
-    role_id: int
-    company_id: int | None = None
-
-class UserOut(UserBase):
-    id: int
-    role: RoleOut | None = None
-    company: CompanyOut | None = None
-
-    class Config:
-        orm_mode = True
-=======
     contraseña: str 
     role_id: int
     company_id: int | None = None
@@ -106,7 +83,6 @@ class UserUpdate(BaseModel):
     role_id: int | None = None
     company_id: int | None = None
     contraseña: str | None = None
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
 # --------------------
 # CourtType
@@ -134,16 +110,11 @@ class CourtBase(BaseModel):
     imagen: str | None = None
     type_id: int
     company_id: int
-<<<<<<< HEAD
-=======
     techo: bool
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
 class CourtCreate(CourtBase):
     pass
 
-<<<<<<< HEAD
-=======
 class CourtUpdate(BaseModel):
     nombre: Optional[str] = None
     ubicación: Optional[str] = None
@@ -153,7 +124,6 @@ class CourtUpdate(BaseModel):
     company_id: Optional[int] = None
     techo: Optional[bool] = None
 
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 class CourtOut(CourtBase):
     id: int
     type: CourtTypeOut | None = None
@@ -174,11 +144,6 @@ class TimeSlotCreate(TimeSlotBase):
 
 class TimeSlotOut(TimeSlotBase):
     id: int
-<<<<<<< HEAD
-
-    class Config:
-        orm_mode = True
-=======
     activo: bool | None = True
 
     class Config:
@@ -190,7 +155,6 @@ class AvailableTimeSlotOut(TimeSlotOut):
 
     class Config:
         from_attributes = True
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
 # --------------------
 # ReservationStatus
@@ -229,8 +193,6 @@ class ReservationOut(ReservationBase):
 
     class Config:
         orm_mode = True
-<<<<<<< HEAD
-=======
 
 class ReservationUpdate(BaseModel):
     user_id: Optional[int] = None
@@ -263,4 +225,3 @@ class TurnoOut(BaseModel):
 
     class Config:
         orm_mode = True
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834

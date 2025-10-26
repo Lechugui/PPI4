@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-from fastapi import FastAPI
-from . import models
-from .database import engine
-
-models.Base.metadata.create_all(bind=engine)
-
-app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"message": "¡Hola Paddle!"}
-=======
 from fastapi.middleware.cors import CORSMiddleware
 from .routers import courts, reservations, time_slots, login
 from fastapi import FastAPI, Depends, HTTPException
@@ -97,4 +84,3 @@ def read_root():
 @app.get("/health")
 def health_check():
     return {"status": "tamos vivos"}
->>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
