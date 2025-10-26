@@ -40,6 +40,10 @@ class CourtType(Base):
 
     courts = relationship("Court", back_populates="type")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 class Court(Base):
     __tablename__ = "courts"
     id = Column(Integer, primary_key=True, index=True)
@@ -47,6 +51,10 @@ class Court(Base):
     ubicación = Column(String)
     disponible = Column(Boolean, default=True)
     imagen = Column(String, nullable=True)
+<<<<<<< HEAD
+=======
+    techo = Column(Boolean, default=False, nullable=True)
+>>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
     type_id = Column(Integer, ForeignKey("courttypes.id"))
     company_id = Column(Integer, ForeignKey("companies.id"))
@@ -55,11 +63,19 @@ class Court(Base):
     company = relationship("Company", back_populates="courts")
     reservations = relationship("Reservation", back_populates="court")
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 class TimeSlot(Base):
     __tablename__ = "time_slots"
     id = Column(Integer, primary_key=True, index=True)
     hora_inicio = Column(Time)
     hora_fin = Column(Time)
+<<<<<<< HEAD
+=======
+    activo = Column(Boolean, default=True, nullable=True)
+>>>>>>> 5f32597536c4ea2021c43050a402a07f663d4834
 
     reservations = relationship("Reservation", back_populates="time_slot")
 
