@@ -172,22 +172,36 @@ def get_available_time_slots(db: Session, court_id: int, fecha: date):
         raise
 
 def update_reservation(db: Session, reservation_id: int, reservation_update: schemas.ReservationUpdate):
-
     db_reservation = db.query(models.Reservation).filter(models.Reservation.id == reservation_id).first()
-
     if not db_reservation:
         return None
+
+    # uso lo que llega o lo actual
+    target_court_id = reservation_update.court_id if reservation_update.court_id is not None else db_reservation.court_id
+    target_fecha    = reservation_update.fecha    if reservation_update.fecha    is not None else db_reservation.fecha
+    target_slot_id  = reservation_update.time_slot_id if reservation_update.time_slot_id is not None else db_reservation.time_slot_id
+
+    # Valido conflicto de otra reserva misma cancha/fecha/slot y no cancelada
+    conflict = db.query(models.Reservation).filter(
+        models.Reservation.id != reservation_id,
+        models.Reservation.court_id == target_court_id,
+        models.Reservation.fecha == target_fecha,
+        models.Reservation.time_slot_id == target_slot_id,
+        models.Reservation.status_id != 3 
+    ).first()
+    if conflict:
+        raise ValueError("El horario seleccionado ya está reservado para esa cancha y fecha.")
 
     for field, value in reservation_update.model_dump(exclude_unset=True).items():
         setattr(db_reservation, field, value)
 
     try:
-        db.add(db_reservation) 
+        db.add(db_reservation)
         db.commit()
-        db.refresh(db_reservation) 
+        db.refresh(db_reservation)
         return db_reservation
     except Exception as e:
-        db.rollback() 
+        db.rollback()
         print(f"Error al actualizar la reserva: {e}")
         return None
     

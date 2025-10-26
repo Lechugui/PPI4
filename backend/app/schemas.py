@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, time
 from typing import Optional
 
@@ -187,8 +187,25 @@ class ReservationOut(ReservationBase):
     class Config:
         orm_mode = True
 
-class ReservationUpdate(ReservationBase):
+class ReservationUpdate(BaseModel):
+    user_id: Optional[int] = None
+    court_id: Optional[int] = None
+    fecha: Optional[date] = None
+    time_slot_id: Optional[int] = None
     status_id: Optional[int] = None
+
+    # Acepta strings ISO YYYY-MM-DD para fecha
+    @field_validator("fecha", mode="before")
+    @classmethod
+    def parse_fecha(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, date):
+            return v
+        try:
+            return date.fromisoformat(v)  
+        except Exception:
+            raise ValueError("fecha debe tener formato YYYY-MM-DD")
 # --------------------
 # Turno 
 # --------------------

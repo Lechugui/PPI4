@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import date
@@ -14,9 +14,6 @@ def create_reservation(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    # Aquí puedes usar current_user para saber quién está haciendo la reserva
-    # crear una reserva
- 
     try:
         return crud.create_reservation(db=db, reservation=reservation)
     except ValueError as e:
@@ -30,9 +27,49 @@ def read_reservations(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    # todas las reservas
-
     return crud.get_reservations(db, user_id=user_id, court_id=court_id, fecha=fecha)
+
+# --- RUTA ESTÁTICA para evitar chocar con "/{reservation_id}"
+@router.get("/available-slots", response_model=List[schemas.AvailableTimeSlotOut])
+def read_available_slots( 
+    court_id: int = Query(...),
+    fecha: date = Query(...),
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+): 
+    return crud.get_available_time_slots(db, court_id=court_id, fecha=fecha)  
+
+@router.put("/reservation/{reservation_id}", response_model=schemas.ReservationOut)
+async def update_reservation(
+    reservation_id: int,
+    reservation_update: schemas.ReservationUpdate,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user),
+):
+    try:
+        updated_reservation = crud.update_reservation(
+            db, reservation_id=reservation_id, reservation_update=reservation_update
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    if not updated_reservation:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Reserva con ID {reservation_id} no encontrada."
+        )
+    return updated_reservation
+
+@router.delete("/reservation/{reservation_id}", response_model=dict)
+def delete_reservation(
+    reservation_id: int,
+    db: Session = Depends(get_db),
+    current_user: models.User = Depends(get_current_user)
+):
+    deleted_id = crud.delete_reservation(db, reservation_id=reservation_id)
+    if deleted_id is None:
+        raise HTTPException(status_code=404, detail=f"Reserva con ID {reservation_id} no encontrada.")
+    return {"message": f"Reserva con ID {deleted_id} eliminada exitosamente."}
 
 @router.get("/{reservation_id}", response_model=schemas.ReservationOut)
 def read_reservation(
@@ -40,42 +77,10 @@ def read_reservation(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user)
 ):
-    # reservas por id
-
     db_reservation = crud.get_reservation(db, reservation_id=reservation_id)
     if db_reservation is None:
         raise HTTPException(status_code=404, detail="Reservation not found")
     return db_reservation
-
-
-@router.delete("/reservation/{reservation_id}", response_model=dict) 
-def delete_reservation(reservation_id: int, db: Session = Depends(get_db), current_user: models.User = Depends(get_current_user)):
-    deleted_id = crud.delete_reservation(db, reservation_id=reservation_id)
-
-    if deleted_id is None:
-        raise HTTPException(status_code=404, detail=f"Reserva con ID {reservation_id} no encontrada.")
-    return {"message": f"Reserva con ID {deleted_id} eliminada exitosamente."}
-
-
-@router.put("/reservation/{reservation_id}", response_model=schemas.ReservationUpdate)
-async def update_reservation(
-    reservation_id: int, 
-    reservation_update: schemas.ReservationUpdate, 
-    db: Session = Depends(get_db),
-    current_user: models.User = Depends(get_current_user),
-):
-    updated_reservation = crud.update_reservation(db, reservation_id=reservation_id, reservation_update=reservation_update)
-
-    if not updated_reservation:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail=f"Reserva con ID {reservation_id} no encontrada."
-        )
-
-    return updated_reservation
-
-
-#Endpoint para exponer el historial de partidos de un usuario
 
 @router.get("/{user_id}/last-matches", response_model=List[schemas.ReservationOut])
 def read_last_matches(
