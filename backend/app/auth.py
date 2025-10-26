@@ -3,9 +3,9 @@ from typing import Optional
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-SECRET_KEY = "supersecretkey"  
+SECRET_KEY = "supersecretkey"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 90
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

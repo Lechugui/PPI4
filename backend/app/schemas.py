@@ -105,6 +105,7 @@ class CourtBase(BaseModel):
     imagen: str | None = None
     type_id: int
     company_id: int
+    techo: bool
 
 class CourtCreate(CourtBase):
     pass
@@ -116,6 +117,7 @@ class CourtUpdate(BaseModel):
     imagen: Optional[str] = None
     type_id: Optional[int] = None
     company_id: Optional[int] = None
+    techo: Optional[bool] = None
 
 class CourtOut(CourtBase):
     id: int

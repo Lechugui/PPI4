@@ -1,10 +1,11 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useBooking } from '../context/BookingContext'
+import WeatherForecast from './WeatherForecast'
 
 const DateSelector = () => {
   const { setSelectedDate, setBookingStep } = useBooking()
   const [currentMonth, setCurrentMonth] = useState(new Date())
+  const [previewDate, setPreviewDate] = useState(null)
 
   // generación de días
   const getDaysInMonth = (year, month) => {
@@ -47,8 +48,14 @@ const DateSelector = () => {
 
   const handleDateSelect = day => {
     const selectedDate = new Date(year, month, day)
-    setSelectedDate(selectedDate)
-    setBookingStep(2) // court selection
+    setPreviewDate(selectedDate)
+  }
+
+  const handleConfirmDate = () => {
+    if (previewDate) {
+      setSelectedDate(previewDate)
+      setBookingStep(2)
+    }
   }
 
   // validate if a date is in the past
@@ -67,6 +74,11 @@ const DateSelector = () => {
 
   for (let day = 1; day <= daysInMonth; day++) {
     const isDisabled = isPastDate(day)
+    const isSelected =
+      previewDate &&
+      previewDate.getDate() === day &&
+      previewDate.getMonth() === month &&
+      previewDate.getFullYear() === year
     calendarDays.push(
       <button
         key={day}
@@ -76,6 +88,8 @@ const DateSelector = () => {
           ${
             isDisabled
               ? 'text-gray-400 cursor-not-allowed'
+              : isSelected
+              ? 'bg-primary text-white'
               : 'hover:bg-primary hover:text-white cursor-pointer'
           }`}
       >
@@ -136,6 +150,20 @@ const DateSelector = () => {
         </div>
 
         <div className='grid grid-cols-7 gap-1'>{calendarDays}</div>
+
+        {previewDate && (
+          <div className='mt-4 space-y-4'>
+            <WeatherForecast date={previewDate} />
+            <div className='card-actions justify-end'>
+              <button
+                onClick={handleConfirmDate}
+                className='btn btn-primary w-full'
+              >
+                Continuar con esta fecha
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
