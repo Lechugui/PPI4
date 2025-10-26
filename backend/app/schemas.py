@@ -1,5 +1,6 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, field_validator
 from datetime import date, time
+from typing import Optional
 
 # --------------------
 # Company
@@ -40,7 +41,11 @@ class UserBase(BaseModel):
     email: EmailStr
 
 class UserCreate(UserBase):
+<<<<<<< HEAD
     contraseña: str
+=======
+    contraseña: str 
+>>>>>>> origin/develop-nico
     role_id: int
     company_id: int | None = None
 
@@ -49,8 +54,39 @@ class UserOut(UserBase):
     role: RoleOut | None = None
     company: CompanyOut | None = None
 
+<<<<<<< HEAD
     class Config:
         orm_mode = True
+=======
+    nombre: str
+    email: str
+
+    class Config:
+        from_attributes = True 
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    contraseña: str
+                                           
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+    user_id: int
+    user_name: str
+    user_email: str
+    role_id: int
+    class Config:
+        from_attributes = True 
+
+class TokenData(BaseModel):
+    email: str | None = None
+
+class UserNombreResponse(BaseModel):
+    nombre: str
+
+class UserUpdate(BaseModel):
+    nombre: Optional[str] = None
+>>>>>>> origin/develop-nico
 
 # --------------------
 # CourtType
@@ -82,6 +118,17 @@ class CourtBase(BaseModel):
 class CourtCreate(CourtBase):
     pass
 
+<<<<<<< HEAD
+=======
+class CourtUpdate(BaseModel):
+    nombre: Optional[str] = None
+    ubicación: Optional[str] = None
+    disponible: Optional[bool] = None
+    imagen: Optional[str] = None
+    type_id: Optional[int] = None
+    company_id: Optional[int] = None
+
+>>>>>>> origin/develop-nico
 class CourtOut(CourtBase):
     id: int
     type: CourtTypeOut | None = None
@@ -102,9 +149,23 @@ class TimeSlotCreate(TimeSlotBase):
 
 class TimeSlotOut(TimeSlotBase):
     id: int
+<<<<<<< HEAD
 
     class Config:
         orm_mode = True
+=======
+    activo: bool | None = True
+
+    class Config:
+        from_attributes = True
+
+# Add this after the TimeSlotOut class
+class AvailableTimeSlotOut(TimeSlotOut):
+    available: bool
+
+    class Config:
+        from_attributes = True
+>>>>>>> origin/develop-nico
 
 # --------------------
 # ReservationStatus
@@ -143,3 +204,38 @@ class ReservationOut(ReservationBase):
 
     class Config:
         orm_mode = True
+<<<<<<< HEAD
+=======
+
+class ReservationUpdate(BaseModel):
+    user_id: Optional[int] = None
+    court_id: Optional[int] = None
+    fecha: Optional[date] = None
+    time_slot_id: Optional[int] = None
+    status_id: Optional[int] = None
+
+    # Acepta strings ISO YYYY-MM-DD para fecha
+    @field_validator("fecha", mode="before")
+    @classmethod
+    def parse_fecha(cls, v):
+        if v in (None, ""):
+            return None
+        if isinstance(v, date):
+            return v
+        try:
+            return date.fromisoformat(v)  
+        except Exception:
+            raise ValueError("fecha debe tener formato YYYY-MM-DD")
+# --------------------
+# Turno 
+# --------------------
+class TurnoOut(BaseModel):
+    id: int
+    usuario_id: int
+    fecha: date
+    descripcion: str | None = None
+    estado: str = "pendiente"  
+
+    class Config:
+        orm_mode = True
+>>>>>>> origin/develop-nico
